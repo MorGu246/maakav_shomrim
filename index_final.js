@@ -41,6 +41,14 @@ app.delete('/Deletepoint/:myid',(req,res) => {
     res.status(200).json(points);
 });
 
+app.get('/admin',(req,res) => {
+res.status(200).sendFile(path.join(__dirname,"/nodeJS_final.html"));
+});
+
+app.get('/',(req,res) => {
+res.status(200).sendFile(path.join(__dirname,"/nodeJS_final.html"));
+});
+
 app.listen(port, () => {
     console.log(`Now listening on port http://localhost:${port}`);
 });
