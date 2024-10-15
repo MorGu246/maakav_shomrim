@@ -21,5 +21,38 @@
         <tbody id="mainTable">
         </tbody>
     </table>
+    <br>
+    <div id="AddPoint" style="background-color: greenyellow;padding:10px;">
+        <input id="point_idx" type="hidden">
+        <label for="point_name">שם נקודה</label>
+        <input type="text" id="point_name"><br>
+        <label for="point_num">מספר נקודה</label>
+        <input type="text" id="point_num"><br>
+        <label for="point_num">זמן ביקור נקודה</label>
+        <input type="text" id="point_num"><br>
+        <button id="btn_add" onclick="SaveItem()">שמור</button>
+        <button id="btn_edit" onclick="EditItem()">עדכן</button>
+    </div>
+    <h2>רשימת נקודות</h2>
+    <table border="1" style="background-color: cyan;">
+        <thead>
+            <tr>
+            <td>שם נקודה</td>
+            <td>מספר נקודה</td>
+            </tr>
+        </thead>
+        <tbody id="mainTable2">
+        </tbody>
+    </table>
+    <br>
+    <div id="AddPoint" style="background-color: greenyellow;padding:10px;">
+        <input id="point_idx" type="hidden">
+        <label for="point_name">שם נקודה</label>
+        <input type="text" id="point_name"><br>
+        <label for="point_num">מספר נקודה</label>
+        <input type="text" id="point_num"><br>
+        <button id="btn_add" onclick="SaveItem()">שמור</button>
+        <button id="btn_edit" onclick="EditItem()">עדכן</button>
+    </div>
 </body>
 </html>
