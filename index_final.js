@@ -12,11 +12,11 @@ app.use(express.static(path.join(__dirname,"")));
 
 let points=[];
 
-app.get('/pointslist',(req,res) => {
+app.get('/point',(req,res) => {
 res.status(200).json(points);
 });
 
-app.post('/Addpoint',(req,res) => {
+app.post('/point',(req,res) => {
     let ThisPoint={};
     ThisPoint.name=req.body.name;
     ThisPoint.num=req.body.num;
@@ -25,9 +25,9 @@ app.post('/Addpoint',(req,res) => {
     res.status(200).json("נקודה נוספה");
 });
 
-app.patch('/Editpoint/:idx',(req,res) => {
+app.patch('/point',(req,res) => {
     let ThisPoint={};
-    let idx=req.params.idx;
+    let idx=req.body.idx;
     ThisPoint.name=req.body.name;
     ThisPoint.num=req.body.num;
     ThisPoint.time=req.body.time;
@@ -35,8 +35,8 @@ app.patch('/Editpoint/:idx',(req,res) => {
     res.status(200).json("נקודה עודכנה");
 });
 
-app.delete('/Deletepoint/:myid',(req,res) => {
-    let idx=req.params.myid;
+app.delete('/point',(req,res) => {
+    let idx=req.body.myid;
     points.splice(idx,1)
     res.status(200).json(points);
 });
