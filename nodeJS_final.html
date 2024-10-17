@@ -13,9 +13,11 @@
     <table border="1" style="background-color: cyan;">
         <thead>
             <tr>
+            <td></td>
             <td>שם נקודה</td>
             <td>מספר נקודה</td>
             <td>זמן ביקור בנקודה</td>
+            <td></td>
             </tr>
         </thead>
         <tbody id="mainTable">
@@ -28,10 +30,10 @@
         <input type="text" id="point_name"><br>
         <label for="point_num">מספר נקודה</label>
         <input type="text" id="point_num"><br>
-        <label for="point_num">זמן ביקור נקודה</label>
-        <input type="text" id="point_num"><br>
-        <button id="btn_add" onclick="SaveItem()">שמור</button>
-        <button id="btn_edit" onclick="EditItem()">עדכן</button>
+        <label for="point_time">זמן ביקור נקודה</label>
+        <input type="text" id="point_time"><br>
+        <button id="btn_add" onclick="SavePoint()">שמור</button>
+        <button id="btn_edit" onclick="EditPoint()">עדכן</button>
     </div>
     <h2>רשימת נקודות</h2>
     <table border="1" style="background-color: cyan;">
@@ -45,14 +47,94 @@
         </tbody>
     </table>
     <br>
-    <div id="AddPoint" style="background-color: greenyellow;padding:10px;">
-        <input id="point_idx" type="hidden">
-        <label for="point_name">שם נקודה</label>
-        <input type="text" id="point_name"><br>
-        <label for="point_num">מספר נקודה</label>
-        <input type="text" id="point_num"><br>
-        <button id="btn_add" onclick="SaveItem()">שמור</button>
-        <button id="btn_edit" onclick="EditItem()">עדכן</button>
+    <div id="AddPoint2" style="background-color: greenyellow;padding:10px;">
+        <input id="point_idx2" type="hidden">
+        <label for="point_name2">שם נקודה</label>
+        <input type="text" id="point_name2"><br>
+        <label for="point_num2">מספר נקודה</label>
+        <input type="text" id="point_num2"><br>
+        <button id="btn_add2" onclick="SavePointToList2()">שמור</button>
+        <button id="btn_edit2" onclick="EditPointToList2()">עדכן</button>
     </div>
+    <button onclick="check()">check</button>
+    <script>
+        let AllPoints=[];
+    async function getAllPoints(){
+        let url="/point";
+        let response=await fetch(url);
+        let data=await response.json();
+        AllPoints=data;
+        console.log("data was entered");
+    }
+    function showPointsAsTable(){
+        let html="";
+        for(let idx in AllPoints){
+        let row=AllPoints[idx];
+        html+="<tr>";
+        html+=`<td><button onclick="showEditPoint(${idx},'${row.name}','${row.num}','${row.time}');">edit</button></td>`;
+        html+=`<td>${row.name}</td>`;
+        html+=`<td>${row.num}</td>`;
+        html+=`<td>${row.time}</td>`;
+        html+=`<td><button onclick="removePoint(${idx});">delete</button></td>`;
+        html+="</tr>";
+        }
+        document.getElementById("mainTable").innerHTML=html;
+    }
+    function showEditPoint(idx,name,num,time){
+        document.getElelmentById("point_idx").value=idx;
+        document.getElelmentById("point_name").value=name;
+        document.getElelmentById("point_num").value=num;
+        document.getElelmentById("point_time").value=time;
+        document.getElelmentById("btn_add").style.display="none";
+        document.getElelmentById("btn_edit").style.display="block";
+        document.getElelmentById("AddPoint").style.display="block";
+    }
+    function showAddForm(){
+        document.getElelmentById("point_idx").value=-1;
+        document.getElelmentById("point_name").value="";
+        document.getElelmentById("point_num").value="";
+        document.getElelmentById("point_time").value="";
+        document.getElelmentById("btn_add").style.display="none";
+        document.getElelmentById("btn_edit").style.display="block";
+        document.getElelmentById("AddPoint").style.display="block";
+    }
+    async function SavePoint(){
+        let name = document.getElementById("point_name").value;
+        let num = document.getElementById("point_num").value;
+        let time = document.getElementById("point_time").value;
+        let url ="/point";
+        let response=await fetch(url,
+            {
+                method:'POST',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({name:name,num:num,time:time})
+            }
+        );
+        let data=await response.json();
+        await check();
+        document.getElelmentById("AddPoint").style.display="none";
+        }
+        async function removePoint(idx){
+            let url ="/point";
+        let response=await fetch(url,
+            {
+                method:'delete',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({myid:idx})
+            }
+        );
+        let data=await response.json();
+        await check();
+        }
+        async function check(){
+        await getAllPoints();
+        console.log(AllPoints);
+        showPointsAsTable();
+    }
+    </script>
 </body>
 </html>
