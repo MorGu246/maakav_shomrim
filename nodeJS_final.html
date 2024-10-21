@@ -10,8 +10,22 @@
 </head>
 <body>
     <h1>ביקורי שומרים</h1>
+    <div id="AddPointVisited" style="background-color: greenyellow;padding:10px;">
+        <input id="point_idx" type="hidden">
+        <label for="point_name">שם נקודה</label>
+        <input type="text" id="point_name"><br>
+        <label for="point_num">מספר נקודה</label>
+        <input type="text" id="point_num"><br>
+        <label for="point_time">זמן ביקור נקודה</label>
+        <input type="text" id="point_time"><br>
+        <button id="btn_add" onclick="SavePointVisited()">שמור</button>
+        <button id="btn_edit" onclick="EditPointVisited()">עדכן</button>
+    </div><br>
     <table border="1" style="background-color: cyan;">
         <thead>
+            <tr><td colspan="0">
+                <button onclick="showAddFormVisited()">הוספה</button>
+            </td></tr>
             <tr>
             <td></td>
             <td>שם נקודה</td>
@@ -24,21 +38,22 @@
         </tbody>
     </table>
     <br>
-    <div id="AddPointVisited" style="background-color: greenyellow;padding:10px;">
-        <input id="point_idx" type="hidden">
-        <label for="point_name">שם נקודה</label>
-        <input type="text" id="point_name"><br>
-        <label for="point_num">מספר נקודה</label>
-        <input type="text" id="point_num"><br>
-        <label for="point_time">זמן ביקור נקודה</label>
-        <input type="text" id="point_time"><br>
-        <button id="btn_add" onclick="SavePointVisited()">שמור</button>
-        <button id="btn_edit" onclick="EditPointVisited()">עדכן</button>
-    </div>
     <button onclick="check()">check</button>
     <h2>רשימת נקודות</h2>
+    <div id="AddPoint2" style="background-color: greenyellow;padding:10px;">
+        <input id="point_idx2" type="hidden">
+        <label for="point_name2">שם נקודה</label>
+        <input type="text" id="point_name2"><br>
+        <label for="point_num2">מספר נקודה</label>
+        <input type="text" id="point_num2"><br>
+        <button id="btn_add2" onclick="SavePointToList2()">שמור</button>
+        <button id="btn_edit2" onclick="EditPointToList2()">עדכן</button>
+    </div><br>
     <table border="1" style="background-color: cyan;">
         <thead>
+            <tr><td colspan="0">
+                <button onclick="showAddForm()">הוספה</button>
+            </td></tr>
             <tr>
             <td></td>
             <td>שם נקודה</td>
@@ -50,15 +65,6 @@
         </tbody>
     </table>
     <br>
-    <div id="AddPoint2" style="background-color: greenyellow;padding:10px;">
-        <input id="point_idx2" type="hidden">
-        <label for="point_name2">שם נקודה</label>
-        <input type="text" id="point_name2"><br>
-        <label for="point_num2">מספר נקודה</label>
-        <input type="text" id="point_num2"><br>
-        <button id="btn_add2" onclick="SavePointToList2()">שמור</button>
-        <button id="btn_edit2" onclick="EditPointToList2()">עדכן</button>
-    </div>
     <button onclick="check2()">check</button>
     <script>
         let AllPointsVisited=[];
@@ -84,26 +90,26 @@
         document.getElementById("mainTable").innerHTML=html;
     }
     function showEditPointVisited(idx,name,num,time){
-        document.getElelmentById("point_idx").value=idx;
-        document.getElelmentById("point_name").value=name;
-        document.getElelmentById("point_num").value=num;
-        document.getElelmentById("point_time").value=time;
-        document.getElelmentById("btn_add").style.display="none";
-        document.getElelmentById("btn_edit").style.display="block";
-        document.getElelmentById("AddPointVisited").style.display="block";
+        document.getElementById("point_idx").value=idx;
+        document.getElementById("point_name").value=name;
+        document.getElementById("point_num").value=num;
+        document.getElementById("point_time").value=time;
+        document.getElementById("btn_add").style.display="none";
+        document.getElementById("btn_edit").style.display="block";
+        document.getElementById("AddPointVisited").style.display="block";
     }
     function showAddFormVisited(){
-        document.getElelmentById("point_idx").value=-1;
-        document.getElelmentById("point_name").value="";
-        document.getElelmentById("point_num").value="";
-        document.getElelmentById("point_time").value="";
-        document.getElelmentById("btn_add").style.display="none";
-        document.getElelmentById("btn_edit").style.display="block";
-        document.getElelmentById("AddPointVisited").style.display="block";
+        document.getElementById("point_idx").value=-1;
+        document.getElementById("point_name").value="";
+        document.getElementById("point_num").value="";
+        document.getElementById("point_time").value="";
+        document.getElementById("btn_add").style.display="block";
+        document.getElementById("btn_edit").style.display="none";
+        document.getElementById("AddPointVisited").style.display="block";
     }
     async function SavePointVisited(){
         let name = document.getElementById("point_name").value;
-        let num = document.getElementById("point_num").value;
+        let num  = document.getElementById("point_num").value;
         let time = document.getElementById("point_time").value;
         let url ="/pointVisited";
         let response=await fetch(url,
@@ -117,7 +123,28 @@
         );
         let data=await response.json();
         await check();
-        document.getElelmentById("AddPointVisited").style.display="none";
+        document.getElementById("AddPointVisited").style.display="none";
+        }
+        async function EditPointVisited(){
+        let idx  = document.getElementById("point_idx").value;
+        let name = document.getElementById("point_name").value;
+        let num  = document.getElementById("point_num").value;
+        let time = document.getElementById("point_time").value;
+        let body_data=JSON.stringify({idx:idx,name:name,num:num,time:time});
+        console.log(body_data);
+        let url ="/pointVisited";
+        let response=await fetch(url,
+            {
+                method:'put',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body:body_data
+            }
+        );
+        let data=await response.json();
+        await check();
+        document.getElementById("AddPointVisited").style.display="none";
         }
         async function removePointVisited(idx){
             let url ="/pointVisited";
@@ -138,6 +165,9 @@
         console.log(AllPointsVisited);
         showPointsVisitedAsTable();
     }
+
+    /********************************************************************************************************************************/
+
     let AllPoints=[];
     async function getAllPoints(){
         let url="/point";
@@ -160,20 +190,20 @@
         document.getElementById("mainTable2").innerHTML=html;
     }
     function showEditPoint(idx,name,num){
-        document.getElelmentById("point_idx2").value=idx;
-        document.getElelmentById("point_name2").value=name;
-        document.getElelmentById("point_num2").value=num;
-        document.getElelmentById("btn_add2").style.display="none";
-        document.getElelmentById("btn_edit2").style.display="block";
-        document.getElelmentById("AddPoint2").style.display="block";
+        document.getElementById("point_idx2").value=idx;
+        document.getElementById("point_name2").value=name;
+        document.getElementById("point_num2").value=num;
+        document.getElementById("btn_add2").style.display="none";
+        document.getElementById("btn_edit2").style.display="block";
+        document.getElementById("AddPoint2").style.display="block";
     }
     function showAddForm(){
-        document.getElelmentById("point_idx2").value=-1;
-        document.getElelmentById("point_name2").value="";
-        document.getElelmentById("point_num2").value="";
-        document.getElelmentById("btn_add2").style.display="none";
-        document.getElelmentById("btn_edit2").style.display="block";
-        document.getElelmentById("AddPoint2").style.display="block";
+        document.getElementById("point_idx2").value=-1;
+        document.getElementById("point_name2").value="";
+        document.getElementById("point_num2").value="";
+        document.getElementById("btn_add2").style.display="block";
+        document.getElementById("btn_edit2").style.display="none";
+        document.getElementById("AddPoint2").style.display="block";
     }
     async function SavePointToList2(){
         let name = document.getElementById("point_name2").value;
@@ -190,7 +220,27 @@
         );
         let data=await response.json();
         await check2();
-        document.getElelmentById("AddPoint2").style.display="none";
+        document.getElementById("AddPoint2").style.display="none";
+        }
+        async function EditPointToList2(){
+        let idx  = document.getElementById("point_idx2").value;
+        let name = document.getElementById("point_name2").value;
+        let num  = document.getElementById("point_num2").value;
+        let body_data=JSON.stringify({idx:idx,name:name,num:num});
+        console.log(body_data);
+        let url ="/point";
+        let response=await fetch(url,
+            {
+                method:'put',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body:body_data
+            }
+        );
+        let data=await response.json();
+        await check2();
+        document.getElementById("AddPoint2").style.display="none";
         }
         async function removePoint(idx){
             let url ="/point";
