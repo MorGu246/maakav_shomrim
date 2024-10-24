@@ -17,20 +17,22 @@ res.status(200).json(pointsVisited);
 });
 
 app.post('/pointVisited',(req,res) => {
+    const guardingTime=new Date()+180;
     let ThisPoint={};
     ThisPoint.name=req.body.name;
     ThisPoint.num=req.body.num;
-    ThisPoint.time=req.body.time;
+    ThisPoint.time=guardingTime;
     pointsVisited.push(ThisPoint);
     res.status(200).json("נקודה נוספה");
 });
 
-app.patch('/pointVisited',(req,res) => {
+app.put('/pointVisited',(req,res) => {
+    const guardingTime=new Date()+180;
     let ThisPoint={};
     let idx=req.body.idx;
     ThisPoint.name=req.body.name;
     ThisPoint.num=req.body.num;
-    ThisPoint.time=req.body.time;
+    ThisPoint.time=guardingTime;
     pointsVisited[idx]=ThisPoint;
     res.status(200).json("נקודה עודכנה");
 });
@@ -55,7 +57,7 @@ app.post('/point',(req,res) => {
     res.status(200).json("נקודה נוספה");
 });
 
-app.patch('/point',(req,res) => {
+app.put('/point',(req,res) => {
     let ThisPoint={};
     let idx=req.body.idx;
     ThisPoint.name=req.body.name;
