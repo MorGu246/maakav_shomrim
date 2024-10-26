@@ -4,14 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-</head>
-<body>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
     <style>
         body{direction:rtl;}
     </style>
@@ -46,7 +38,13 @@
     <br>
     <button onclick="check()">check</button>
     <h2>רשימת נקודות</h2>
-    <div id="AddPoint2" style="background-color: greenyellow;padding:10px;">
+    <!--<form method="POST">--><!--action="submit"-->
+        <label for="password">סיסמה:</label>
+        <input type="password" id="password" name="password" onchange="checkPassword(this.value)" required>
+        <!--<input id="button" type="submit" name="button" onclick="myFunction();" value="enter"/>
+        <button type="submit" id="check_password">Submit</button>onclick="reveal()"-->
+    <!--</form>-->
+    <div id="AddPoint2" style="background-color: greenyellow;padding:10px;display:none">
         <input id="point_idx2" type="hidden">
         <label for="point_name2">שם נקודה</label>
         <input type="text" id="point_name2"><br>
@@ -58,7 +56,7 @@
     <table border="1" style="background-color: cyan;">
         <thead>
             <tr><td colspan="0">
-                <button onclick="showAddForm()">הוספה</button>
+                <button id="addButton" onclick="showAddForm()" style="display:none">הוספה</button>
             </td></tr>
             <tr>
             <td></td>
@@ -73,6 +71,7 @@
     <br>
     <button onclick="check2()">check</button>
     <script>
+
         let AllPointsVisited=[];
     async function getAllPointsVisited(){
         let url="/pointVisited";
@@ -95,7 +94,8 @@
         }
         document.getElementById("mainTable").innerHTML=html;
     }
-    function showEditPointVisited(idx,name,num,){
+
+    function showEditPointVisited(idx,name,num){
         document.getElementById("point_idx").value=idx;
         document.getElementById("point_name").value=name;
         document.getElementById("point_num").value=num;
@@ -169,6 +169,17 @@
     }
 
     /********************************************************************************************************************************/
+
+    function checkPassword(value){
+            if(value==1234){
+                reveal();
+            };
+        }
+
+        function reveal(){
+        document.getElementById("AddPoint2").style.display="block";
+        document.getElementById("addButton").style.display="block";
+    }
 
     let AllPoints=[];
     async function getAllPoints(){
@@ -264,7 +275,5 @@
         showPointsAsTable();
     }
     </script>
-</body>
-</html>
 </body>
 </html>
