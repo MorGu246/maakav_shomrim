@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body
+        {
+            direction:rtl;
+            background-color:coral;
+        }
+    </style>
+</head>
+<body>
+    <h1>ביקורי שומרים</h1>
+    <h2>ביקורי שומרים בנקודות</h2>
+    <table border="1" style="background-color:lightskyblue;">
+        <thead>
+            <tr>
+            <td></td>
+            <td>שם נקודה</td>
+            <td>מספר נקודה</td>
+            <td>זמן ביקור בנקודה</td>
+            <td></td>
+            </tr>
+        </thead>
+        <tbody id="mainTable">
+        </tbody>
+        <tr><td colspan="0">
+            <button onclick="showAddFormVisited()">הוספה</button>
+        </td></tr>
+    </table>
+    <br>
+    <div id="AddPointVisited" style="background-color: greenyellow;padding:10px;">
+        <input id="point_idx" type="hidden">
+        <label for="point_name">שם נקודה</label>
+        <input type="text" id="point_name"><br>
+        <label for="point_num">מספר נקודה</label>
+        <input type="text" id="point_num"><br>
+        <button id="btn_add" onclick="SavePointVisited()">שמור</button>
+        <button id="btn_edit" onclick="EditPointVisited()">עדכן</button>
+    </div><br>
+    <button onclick="check()">רשימת הביקורים הנוכחית</button><br>
+    <script>
+
+    let AllPointsVisited=[];
+    async function getAllPointsVisited(){
+        let url="/pointVisited";
+        let response=await fetch(url);
+        let data=await response.json();
+        AllPointsVisited=data;
+        console.log("data was entered");
+    }
+    function showPointsVisitedAsTable(){
+        let html="";
+        for(let idx in AllPointsVisited){
+        let row=AllPointsVisited[idx];
+        html+="<tr>";
+        html+=`<td><button onclick="showEditPointVisited(${idx},'${row.name}','${row.num}');">עריכה</button></td>`;
+        html+=`<td>${row.name}</td>`;
+        html+=`<td>${row.num}</td>`;
+        html+=`<td>${row.time}</td>`;
+        html+=`<td><button onclick="removePointVisited(${idx});">מחיקה</button></td>`;
+        html+="</tr>";
+        }
+        document.getElementById("mainTable").innerHTML=html;
+    }
+
+    function showEditPointVisited(idx,name,num){
+        document.getElementById("point_idx").value=idx;
+        document.getElementById("point_name").value=name;
+        document.getElementById("point_num").value=num;
+        document.getElementById("btn_add").style.display="none";
+        document.getElementById("btn_edit").style.display="block";
+        document.getElementById("AddPointVisited").style.display="block";
+    }
+    function showAddFormVisited(){
+        document.getElementById("point_idx").value=-1;
+        document.getElementById("point_name").value="";
+        document.getElementById("point_num").value="";
+        document.getElementById("btn_add").style.display="block";
+        document.getElementById("btn_edit").style.display="none";
+        document.getElementById("AddPointVisited").style.display="block";
+    }
+    async function SavePointVisited(){
+        let name = document.getElementById("point_name").value;
+        let num  = document.getElementById("point_num").value;
+        let url ="/pointVisited";
+        let response=await fetch(url,
+            {
+                method:'POST',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({name:name,num:num})
+            }
+        );
+        let data=await response.json();
+        await check();
+        document.getElementById("AddPointVisited").style.display="none";
+        }
+        async function EditPointVisited(){
+        let idx  = document.getElementById("point_idx").value;
+        let name = document.getElementById("point_name").value;
+        let num  = document.getElementById("point_num").value;
+        let body_data=JSON.stringify({idx:idx,name:name,num:num});
+        console.log(body_data);
+        let url ="/pointVisited";
+        let response=await fetch(url,
+            {
+                method:'put',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body:body_data
+            }
+        );
+        let data=await response.json();
+        await check();
+        document.getElementById("AddPointVisited").style.display="none";
+        }
+        async function removePointVisited(idx){
+            let url ="/pointVisited";
+        let response=await fetch(url,
+            {
+                method:'delete',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({myid:idx})
+            }
+        );
+        let data=await response.json();
+        await check();
+        }
+        async function check(){
+        await getAllPointsVisited();
+        console.log(AllPointsVisited);
+        showPointsVisitedAsTable();
+    }
+    </script>
+</body>
+</html>
