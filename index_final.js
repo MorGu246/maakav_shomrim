@@ -76,6 +76,10 @@ app.get('/admin',(req,res) => {
     res.status(200).sendFile(path.join(__dirname,"/nodeJS_final.html"));
     });
 
+app.get('/admin2',(req,res) => {
+    res.status(200).sendFile(path.join(__dirname,"/nodeJS_final_part2.html"));
+    });
+
 app.get('/',(req,res) => {
 res.status(200).sendFile(path.join(__dirname,"/nodeJS_final.html"));
 });
