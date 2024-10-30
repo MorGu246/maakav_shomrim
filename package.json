@@ -1,0 +1,14 @@
+{
+  "name": "vs_lib",
+  "version": "1.0.0",
+  "description": "local library with vs code",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mor Guetta",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
